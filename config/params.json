@@ -1,0 +1,11 @@
+{
+  "mode": "train",
+  "optim": "Adam",
+  "num_classes": 2,
+
+  "random_seed": 333,
+
+  "batch_size": 128,
+  "epoch": 10,
+  "learning_rate": 0.001
+}
