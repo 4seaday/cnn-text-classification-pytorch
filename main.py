@@ -1,15 +1,21 @@
 from utils import Params
-from utils import build_tokenizer, build_vocab, padding_sentence, token_to_idx
+from utils import build_tokenizer, padding_sentence, make_iter
+from train import Trainer
 
 def main():
-    params = Params('config/params.json')
     build_tokenizer() # tokenizer pickle dump
-    vocab_size, max_sequence_legnth = build_vocab() # 전체 데이터셋에 대한 vocabulary
-    print(vocab_size, max_sequence_legnth)
-    # vocabulary에 대해서 train 파일과 max_sequencelength를 반환받아야 함.
 
+    params = Params('config/params.json')
+    print('start build tokenizer')
+    print('finish build tokenizer')
+    # max_seq, vocab_size = build_vocab() # 전체 데이터셋에 대한 vocabulary
 
-    return 0
+    if params.mode == 'train':
+        inputs, labels = padding_sentence(params)
+        data_loader = make_iter(params, inputs, labels)
+        trainer = Trainer(params)
+        print('lets train')
+        trainer.train(data_loader)
 
 if __name__ == '__main__':
     main()

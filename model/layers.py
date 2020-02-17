@@ -19,7 +19,7 @@ class ConvolutionLayer(nn.Module):
         tetra_map = F.relu(self._tetra_filter(x))
         penta_map = F.relu(self._penta_filter(x))
 
-        return Tuple[tri_map, tetra_map, penta_map]
+        return tri_map, tetra_map, penta_map
 
 class MaxPooing(nn.Module):
     def forward(self, x: Tuple[torch.Tensor, torch.Tensor, torch.Tensor]) -> torch.Tensor :

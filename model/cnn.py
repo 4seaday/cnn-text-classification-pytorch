@@ -13,7 +13,7 @@ class SentenceCNN(nn.Module):
         self._num_class = num_classes
 
         self._embedding = nn.Embedding(self._vocab_size, self._embedding_size)
-        self._convolution = ConvolutionLayer(1, 100)
+        self._convolution = ConvolutionLayer(1, 100, self._embedding_size)
         self._pooling = MaxPooing()
         self._dropout = nn.Dropout()
         self._fc = nn.Linear(3*100, num_classes)
