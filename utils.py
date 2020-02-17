@@ -33,15 +33,12 @@ class Params:
     def cuda_is_avail(self):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-
-
         params = {'device': device}
         self.__dict__.update(params)
 
     @property
     def dict(self):
         return self.__dict__
-
 
 
 def build_tokenizer():
@@ -80,6 +77,8 @@ def build_vocab():
     for _, row in tqdm(df.iterrows()):
         sentence_list.append(tokenizer.tokenize(str(row[1])))
 
+    max_sequence_length = max(len(sentence) for sentence in sentence_list)
+
     token_counter = Counter(itertools.chain.from_iterable(sentence_list))
 
     vocab = ['<PAD>'] + [word for word in token_counter.keys()]
@@ -91,6 +90,7 @@ def build_vocab():
     with open('pickles/vocab.pickle', 'wb') as vocabulary:
         pickle.dump(word_to_idx, vocabulary)
 
+    return vocab_size, max_sequence_length
 
 def padding_sentence(config):
     pickle_tokenizer = open('pickles/tokenizer.pickle', 'rb')
@@ -98,20 +98,14 @@ def padding_sentence(config):
 
     data_dir = Path().cwd() / 'data'
 
-    if config.mode == 'train':
-        mode = 'train'
-    else:
-        mode = 'test'
+    train_file = os.path.join(data_dir, 'ratings_train.txt')
+    df = pd.read_table(train_file, encoding='utf-8')
 
-    corpus_file = os.path.join(data_dir, f'ratings_{mode}.txt')
-    df = pd.read_table(corpus_file, encoding='utf-8')
-
-    sentence_list = []
+    train_list = []
     for _, row in tqdm(df.iterrows()):
-        sentence_list.append(tokenizer.tokenize(str(row[1])))
+        train_list.append(tokenizer.tokenize(str(row[1])))
 
 
-    max_sequence_length = max(len(sentence) for sentence in sentence_list)
     ################################ train, test 모두 동일해야되는거 아닌가??
 
     padded_sentence = []

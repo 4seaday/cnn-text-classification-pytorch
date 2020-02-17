@@ -3,12 +3,11 @@ from utils import build_tokenizer, build_vocab, padding_sentence, token_to_idx
 
 def main():
     params = Params('config/params.json')
-    tokenizer = build_tokenizer()
-    vocab = build_vocab(sentence_list) # 전체 데이터셋에 대한 vocabulary
+    build_tokenizer() # tokenizer pickle dump
+    vocab_size, max_sequence_legnth = build_vocab() # 전체 데이터셋에 대한 vocabulary
+    print(vocab_size, max_sequence_legnth)
+    # vocabulary에 대해서 train 파일과 max_sequencelength를 반환받아야 함.
 
-    if params.mode == 'train':
-        sentence_list = padding_sentence(sentence_list)
-        sentence_list = token_to_idx(sentence_list, vocab)
 
     return 0
 
